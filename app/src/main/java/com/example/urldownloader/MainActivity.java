@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initUi();
         getClickOnButtonDownload();
     }
@@ -140,10 +139,11 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size() - numNotDash) + numNotDash);
                                     newLink = ytFiles.get(itag).getUrl();
+                                    Log.d("Tarang", "onExtractionComplete: "+newLink);
                                     String title = "Video is downloading !!";
                                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(newLink));
-                                    request.setTitle(title);
-                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,title+".mp4");
+                                    request.setTitle(videoMeta.getTitle());
+                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,videoMeta.getTitle()+".mp4");
                                     DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
                                     request.allowScanningByMediaScanner();
                                     request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
