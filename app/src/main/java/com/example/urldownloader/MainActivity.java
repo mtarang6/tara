@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                                     downloadManager.enqueue(request);
                                     dialog.dismiss();
                                     et_search.setText("");
+                                    et_search.setVisibility(View.GONE);
+                                    button_download.setVisibility(View.GONE);
                                     Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
 
                                 }
@@ -153,12 +155,14 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.youtube:
                                 et_search.setVisibility(View.VISIBLE);
                                 button_download.setVisibility(View.VISIBLE);
+                                btn_popup.setVisibility(View.GONE);
                                 youtubeMethod();
                                 break;
 
                             case R.id.instagram:
                                 et_search.setVisibility(View.VISIBLE);
                                 button_download.setVisibility(View.VISIBLE);
+                                btn_popup.setVisibility(View.GONE);
                                 instagramMethod();
                                 break;
 
@@ -227,12 +231,15 @@ public class MainActivity extends AppCompatActivity {
                                     downloadManager.enqueue(request);
                                     et_search.setText("");
                                     dialog.dismiss();
+                                    et_search.setVisibility(View.GONE);
+                                    button_download.setVisibility(View.GONE);
                                     Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
                                 }
                             }
 
                             @Override
                             protected void onExtractionFail(String Error) {
+                                Toast.makeText(MainActivity.this, "check platform please", Toast.LENGTH_SHORT).show();
                                 //Extraction Fail
                             }
                         }.Extractor(MainActivity.this, Url);

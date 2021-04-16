@@ -22,7 +22,7 @@
          android:layout_height="wrap_content"
          android:id="@+id/et_search"
          android:visibility="gone"
-         android:hint="Enter Url"/>
+         android:hint="Enter url"/>
 
     <Button
         android:layout_width="match_parent"
