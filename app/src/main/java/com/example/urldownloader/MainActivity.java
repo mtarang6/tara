@@ -20,9 +20,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.ashudevs.instagramextractor.InstagramExtractor;
@@ -37,7 +39,7 @@ import at.huber.youtubeExtractor.YtFile;
 
 public class MainActivity extends AppCompatActivity {
     private EditText et_search;
-    private Button button_download;
+    private Button button_download,btn_popup;
     private String newLink;
     private static final int STORAGE_REQUEST_CODE = 1;
     private String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -49,40 +51,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initUi();
-        getClickOnButtonDownload();
+        getClickonPopUp();
+
     }
-
-    private void requestStoragePermission() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Permission needed")
-                    .setMessage("This permission is needed because of this and that")
-                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                           ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission
-                           .WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},STORAGE_REQUEST_CODE);
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create().show();
-        }else {
-            ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission
-                            .WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},STORAGE_REQUEST_CODE);
-        }
-    }
-
-    private void getClickOnButtonDownload() {
-
+    private void youtubeMethod(){
         button_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE
-                        )   == PackageManager.PERMISSION_GRANTED){
+                )   == PackageManager.PERMISSION_GRANTED){
                     String Url = et_search.getText().toString().trim();
                     if(Url.isEmpty()){
                         Toast.makeText(MainActivity.this, "Url is required", Toast.LENGTH_SHORT).show();
@@ -155,6 +132,85 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         }.execute(Url);
+                    }
+                }else{
+                    requestStoragePermission();
+                }
+
+            }
+        });
+    }
+    private void getClickonPopUp() {
+        btn_popup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this,btn_popup);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.youtube:
+                                et_search.setVisibility(View.VISIBLE);
+                                button_download.setVisibility(View.VISIBLE);
+                                youtubeMethod();
+                                break;
+
+                            case R.id.instagram:
+                                et_search.setVisibility(View.VISIBLE);
+                                button_download.setVisibility(View.VISIBLE);
+                                instagramMethod();
+                                break;
+
+                        }
+                      return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    private void requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Permission needed")
+                    .setMessage("This permission is needed because of this and that")
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                           ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission
+                           .WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},STORAGE_REQUEST_CODE);
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+        }else {
+            ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission
+                            .WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},STORAGE_REQUEST_CODE);
+        }
+    }
+
+    private void instagramMethod() {
+
+        button_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE
+                        )   == PackageManager.PERMISSION_GRANTED){
+                    String Url = et_search.getText().toString().trim();
+                    if(Url.isEmpty()){
+                        Toast.makeText(MainActivity.this, "Url is required", Toast.LENGTH_SHORT).show();
+                    }else{
+                        dialog = new ProgressDialog(MainActivity.this);
+                        dialog.setTitle("Wait for a moment");
+                        dialog.setMessage("Please wait...");
+                        dialog.setCancelable(false);
+                        dialog.show();
                         new InstagramExtractor()
                         {
                             @Override
@@ -192,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
     private void initUi() {
         et_search = (EditText) findViewById(R.id.et_search);
         button_download = (Button) findViewById(R.id.button_download);
+        btn_popup = (Button)findViewById(R.id.btn_popup);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
