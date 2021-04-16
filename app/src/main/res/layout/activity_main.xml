@@ -9,10 +9,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_popup"
         android:layout_margin="30dp"
+        android:layout_gravity="center"
         android:text="Choose Platform"
         android:textColor="@color/black"
         android:textSize="20sp"
