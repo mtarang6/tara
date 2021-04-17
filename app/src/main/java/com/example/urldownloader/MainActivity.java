@@ -76,11 +76,24 @@ public class MainActivity extends AppCompatActivity {
                             @SuppressLint("StaticFieldLeak")
                             @Override
                             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
-                                if (ytFiles != null) {
-                                            YtFile ytFile = ytFiles.get(22);
-                                            downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
+                                 try{
+                                     if (ytFiles != null) {
+                                         YtFile ytFile = ytFiles.get(22);
+                                         downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
 
-                                }
+                                     }
+                                 }catch (NullPointerException e){
+                                     e.printStackTrace();
+                                     Toast.makeText(MainActivity.this, "This is official account video,can't download yetit", Toast.LENGTH_SHORT).show();
+                                 }
+                                /* finally {
+                                     if (ytFiles != null) {
+                                         YtFile ytFile = ytFiles.get(22);
+                                         downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
+
+                                     }
+                                 }*/
+
 
                             }
                         }.extract(Url, true, false);
@@ -132,12 +145,12 @@ public class MainActivity extends AppCompatActivity {
                                 btn_popup.setVisibility(View.GONE);
                                 instagramMethod();
                                 break;
-                            case R.id.twitter:
+                           /* case R.id.twitter:
                                 et_search.setVisibility(View.VISIBLE);
                                 button_download.setVisibility(View.VISIBLE);
                                 btn_popup.setVisibility(View.GONE);
                                 twitterMethod();
-                                break;
+                                break;*/
 
                         }
                       return true;
@@ -148,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void twitterMethod() {
+   /* private void twitterMethod() {
         button_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }.Extract(MainActivity.this,"","", Url);
 
+
                     }
                 }else{
                     requestStoragePermission();
@@ -202,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
     private void requestStoragePermission() {
         if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
