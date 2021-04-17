@@ -84,8 +84,10 @@ public class MainActivity extends AppCompatActivity {
                                      }
                                  }catch (NullPointerException e){
                                      e.printStackTrace();
-                                     Toast.makeText(MainActivity.this, "Official account's video can't download yet...", Toast.LENGTH_SHORT).show();
-                                     dialog.dismiss();
+                                     Toast.makeText(MainActivity.this, "please try again", Toast.LENGTH_SHORT).show();
+                                     et_search.setVisibility(View.GONE);
+                                     button_download.setVisibility(View.GONE);
+                                     btn_popup.setVisibility(View.VISIBLE);
                                  }
                                 /* finally {
                                      if (ytFiles != null) {
