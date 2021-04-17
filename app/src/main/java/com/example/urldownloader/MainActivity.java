@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void youtubeMethod(){
+
         button_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                     et_search.setText("");
                                     et_search.setVisibility(View.GONE);
                                     button_download.setVisibility(View.GONE);
+                                    btn_popup.setVisibility(View.VISIBLE);
                                     Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
 
                                 }
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                     et_search.setVisibility(View.GONE);
                                     button_download.setVisibility(View.GONE);
+                                    btn_popup.setVisibility(View.VISIBLE);
                                     Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
                                 }
                             }
