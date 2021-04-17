@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import com.ashudevs.instagramextractor.InstagramExtractor;
 import com.ashudevs.instagramextractor.InstagramFile;
+import com.ashudevs.twitterurlextractor.TwitterExtractor;
+import com.ashudevs.twitterurlextractor.TwitterFile;
 
 import java.util.Random;
 
@@ -130,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
                                 btn_popup.setVisibility(View.GONE);
                                 instagramMethod();
                                 break;
+                            case R.id.twitter:
+                                et_search.setVisibility(View.VISIBLE);
+                                button_download.setVisibility(View.VISIBLE);
+                                btn_popup.setVisibility(View.GONE);
+                                twitterMethod();
+                                break;
 
                         }
                       return true;
@@ -138,6 +146,62 @@ public class MainActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
+    }
+
+    private void twitterMethod() {
+        button_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE
+                )   == PackageManager.PERMISSION_GRANTED){
+                    String Url = et_search.getText().toString().trim();
+                    if(Url.isEmpty()){
+                        Toast.makeText(MainActivity.this, "Url is required", Toast.LENGTH_SHORT).show();
+                    }else{
+                        dialog = new ProgressDialog(MainActivity.this);
+                        dialog.setTitle("Wait for a moment");
+                        dialog.setMessage("Please wait...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        new TwitterExtractor()
+                        {
+                            @Override
+                            protected void onExtractionComplete(TwitterFile twitterFile)
+                            {
+                                if(twitterFile != null){
+                                    String title = "Video is downloading !!";
+                                    String link = twitterFile.getUrl();
+                                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(link));
+                                    request.setTitle(title);
+                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,title+".mp4");
+                                    DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+                                    request.allowScanningByMediaScanner();
+                                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+                                    downloadManager.enqueue(request);
+                                    et_search.setText("");
+                                    dialog.dismiss();
+                                    et_search.setVisibility(View.GONE);
+                                    button_download.setVisibility(View.GONE);
+                                    btn_popup.setVisibility(View.VISIBLE);
+                                    Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            @Override
+                            protected void onExtractionFail(String Error)
+                            {
+                                //Fail
+                            }
+                        }.Extract(MainActivity.this,"","", Url);
+
+                    }
+                }else{
+                    requestStoragePermission();
+                }
+
+            }
+        });
+
     }
 
     private void requestStoragePermission() {

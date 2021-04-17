@@ -4,4 +4,6 @@
         android:title="You Tube"/>
     <item android:id="@+id/instagram"
         android:title="Instagram"/>
+    <item android:id="@+id/twitter"
+        android:title="Twitter"/>
 </menu>
