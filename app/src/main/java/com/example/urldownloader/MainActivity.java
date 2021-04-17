@@ -70,72 +70,18 @@ public class MainActivity extends AppCompatActivity {
                         dialog.setMessage("Please wait...");
                         dialog.setCancelable(false);
                         dialog.show();
-                       /* new YouTubeUriExtractor(MainActivity.this) {
-                            @Override
-                            public void onUrisAvailable(String videoId, String videoTitle, SparseArray<YtFile> ytFiles) {
-                                if (ytFiles != null) {
-                                    int numNotDash = 0;
-                                    int itag = 22;
-                                    for (int i = 0; i < ytFiles.size(); i++) {
-                                        itag = ytFiles.keyAt(i);
-                                        if (ytFiles.get(itag).getFormat().isDashContainer()) {
-                                            numNotDash = i;
-                                            break;
-                                        }
-                                    }
-                                    itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size() - numNotDash) + numNotDash);
-                                    newLink = ytFiles.get(itag).getUrl();
-                                    String title = "Video is downloading !!";
-                                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(newLink));
-                                    request.setTitle(title);
-                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, title + ".mp4");
-                                    DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                                    request.allowScanningByMediaScanner();
-                                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-                                    downloadManager.enqueue(request);
-                                    dialog.dismiss();
-                                    et_search.setText("");
-                                    Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
-                                }
-
-                            }
-                        }.execute(Url);*/
                         new YouTubeExtractor(MainActivity.this){
                             @SuppressLint("StaticFieldLeak")
                             @Override
                             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
-                                // assertNotNull(ytFiles);
                                 if (ytFiles != null) {
-                                    int numNotDash = 0;
-                                    int itag = 22;
-                                    for (int i = 0; i < ytFiles.size(); i++) {
-                                        itag = ytFiles.keyAt(i);
-                                        if (ytFiles.get(itag).getFormat().isDashContainer()) {
-                                            numNotDash = i;
-                                            break;
-                                        }
-                                    }
-                                    itag = ytFiles.keyAt(new Random().nextInt(ytFiles.size() - numNotDash) + numNotDash);
-                                    newLink = ytFiles.get(itag).getUrl();
-                                    Log.d("Tarang", "onExtractionComplete: "+newLink);
-                                    String title = "Video is downloading !!";
-                                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(newLink));
-                                    request.setTitle(videoMeta.getTitle());
-                                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,videoMeta.getTitle()+".mp4");
-                                    DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
-                                    request.allowScanningByMediaScanner();
-                                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-                                    downloadManager.enqueue(request);
-                                    dialog.dismiss();
-                                    et_search.setText("");
-                                    et_search.setVisibility(View.GONE);
-                                    button_download.setVisibility(View.GONE);
-                                    btn_popup.setVisibility(View.VISIBLE);
-                                    Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
+                                            YtFile ytFile = ytFiles.get(22);
+                                            downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
 
                                 }
+
                             }
-                        }.execute(Url);
+                        }.extract(Url, true, false);
                     }
                 }else{
                     requestStoragePermission();
@@ -144,6 +90,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void downloadFromUrl(String url, String title) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle(title);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,title+".mp4");
+        DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        downloadManager.enqueue(request);
+        et_search.setText("");
+        dialog.dismiss();
+        et_search.setVisibility(View.GONE);
+        button_download.setVisibility(View.GONE);
+        btn_popup.setVisibility(View.VISIBLE);
+        Toast.makeText(MainActivity.this, "Your video is being download", Toast.LENGTH_LONG).show();
+    }
+
     private void getClickonPopUp() {
         btn_popup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                                     request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,title+".mp4");
                                     DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
                                     request.allowScanningByMediaScanner();
+                                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                                     request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                                     downloadManager.enqueue(request);
                                     et_search.setText("");
