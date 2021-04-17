@@ -39,4 +39,5 @@ dependencies {
     implementation 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
     implementation 'com.github.Ashusolanki:InstagramExtractor:0.0.1'
     implementation 'com.github.Ashusolanki:TwitterUrlExtractor:0.0.1'
+   // implementation 'com.github.Commit451.YouTubeExtractor:youtubeextractor:2.1.0'
 }

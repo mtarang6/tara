@@ -76,9 +76,12 @@ public class MainActivity extends AppCompatActivity {
                             @SuppressLint("StaticFieldLeak")
                             @Override
                             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
+                               // YtFile ytFile = null;
                                  try{
                                      if (ytFiles != null) {
-                                         YtFile ytFile = ytFiles.get(22);
+                                         //for(int i= 0; i < ytFiles.size(); i++){
+                                         YtFile   ytFile = ytFiles.get(22);
+                                        // }
                                          downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
 
                                      }
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }.extract(Url, true, false);
                     }
+
                 }else{
                     requestStoragePermission();
                 }
