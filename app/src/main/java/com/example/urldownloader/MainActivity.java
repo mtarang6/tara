@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,8 +16,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,17 +23,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-
 import com.ashudevs.instagramextractor.InstagramExtractor;
 import com.ashudevs.instagramextractor.InstagramFile;
-import com.ashudevs.twitterurlextractor.TwitterExtractor;
-import com.ashudevs.twitterurlextractor.TwitterFile;
-
-import java.util.Random;
-
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
-import at.huber.youtubeExtractor.YouTubeUriExtractor;
 import at.huber.youtubeExtractor.YtFile;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void youtubeMethod(){
-
         button_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,12 +65,9 @@ public class MainActivity extends AppCompatActivity {
                             @SuppressLint("StaticFieldLeak")
                             @Override
                             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
-                               // YtFile ytFile = null;
                                  try{
                                      if (ytFiles != null) {
-                                         //for(int i= 0; i < ytFiles.size(); i++){
                                          YtFile   ytFile = ytFiles.get(22);
-                                        // }
                                          downloadFromUrl(ytFile.getUrl(), videoMeta.getTitle());
 
                                      }
@@ -145,18 +131,44 @@ public class MainActivity extends AppCompatActivity {
                                 btn_popup.setVisibility(View.GONE);
                                 instagramMethod();
                                 break;
-                           /* case R.id.twitter:
+                            case R.id.other:
                                 et_search.setVisibility(View.VISIBLE);
                                 button_download.setVisibility(View.VISIBLE);
                                 btn_popup.setVisibility(View.GONE);
-                                twitterMethod();
-                                break;*/
+                                OtherMethod();
+                                break;
 
                         }
                       return true;
                     }
                 });
                 popupMenu.show();
+            }
+        });
+    }
+
+    private void OtherMethod() {
+        button_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE
+                )   == PackageManager.PERMISSION_GRANTED){
+                    String Url = et_search.getText().toString().trim();
+                    if(Url.isEmpty()){
+                        Toast.makeText(MainActivity.this, "Url is required", Toast.LENGTH_SHORT).show();
+                    }else{
+                        dialog = new ProgressDialog(MainActivity.this);
+                        dialog.setTitle("Wait for a moment");
+                        dialog.setMessage("Please wait...");
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        downloadFromUrl(Url,"Url");
+
+                    }
+                }else{
+                    requestStoragePermission();
+                }
+
             }
         });
     }
@@ -217,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }*/
-
     private void requestStoragePermission() {
         if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
             new AlertDialog.Builder(MainActivity.this)
@@ -241,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                             .WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},STORAGE_REQUEST_CODE);
         }
     }
-
     private void instagramMethod() {
 
         button_download.setOnClickListener(new View.OnClickListener() {
