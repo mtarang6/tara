@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                                      }
                                  }catch (NullPointerException e){
                                      e.printStackTrace();
-                                     Toast.makeText(MainActivity.this, "This is official account video,can't download yetit", Toast.LENGTH_SHORT).show();
+                                     Toast.makeText(MainActivity.this, "Official account's video can't download yet...", Toast.LENGTH_SHORT).show();
                                  }
                                 /* finally {
                                      if (ytFiles != null) {
