@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                                 btn_popup.setVisibility(View.GONE);
                                 youtubeMethod();
                                 break;
-
                             case R.id.instagram:
                                 et_search.setVisibility(View.VISIBLE);
                                 button_download.setVisibility(View.VISIBLE);
@@ -173,12 +172,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
    /* private void twitterMethod() {
         button_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE
-                )   == PackageManager.PERMISSION_GRANTED){
+                if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)  == PackageManager.PERMISSION_GRANTED){
                     String Url = et_search.getText().toString().trim();
                     if(Url.isEmpty()){
                         Toast.makeText(MainActivity.this, "Url is required", Toast.LENGTH_SHORT).show();
@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             protected void onExtractionFail(String Error) {
                                 Toast.makeText(MainActivity.this, "check platform please", Toast.LENGTH_SHORT).show();
-                                //Extraction Fail
+                                dialog.dismiss();
                             }
                         }.Extractor(MainActivity.this, Url);
 
