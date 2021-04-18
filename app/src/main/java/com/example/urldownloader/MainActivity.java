@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             protected void onExtractionFail(String Error) {
-                                Toast.makeText(MainActivity.this, "try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "please try again", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }.Extractor(MainActivity.this, Url);
